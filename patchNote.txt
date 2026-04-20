@@ -1,0 +1,43 @@
+v0.01.0 = Nice prototype
+v0.02.0 = séparation css et js + rédaction README.md 
+v0.03.0 = licence MIT
+v0.03.1 = responsive start
+v0.04.0 = grille 8 x 8 
+v0.05.0 = flip optimiser + [POLISH] animation
+v0.06.0 = Ticket de lotterie + score + relancer
+v0.07.0 = Revoir la grille fini
+v0.08.0 = [POLISH] swap grid / ticket
+v0.09.0 = Effets sonores
+v0.09.1 = bouton Muted
+v0.10.0 = interface musique
+v0.10.1 = redirection vers la musique hébergé
+v0.10.2 = [POLISH] barre de volume
+v0.10.3 = musique de victoire
+v0.10.4 = [MODULE] animation pallette + feux d'artifice
+v0.11.0 = animation pallette menu ticket + sélection musique de victoire
+v0.11.1 = animation pallette uniquement grille fini + ajustement bouton voir le ticket
+v0.11.2 = [MODULE] combo
+v0.12.0 = Combo intégré dans grid.js
+v0.13.0 = Affiché les stats combo
+v0.14.0 = [POLISH] stats combo avec un bouton détail
+v0.14.1 = [POLISH] bouton stats combo + retour au ticket
+v0.14.2 = [POLISH] text last combo en dessous du résultat
+v0.15.0 = Score
+v0.15.1 = [POLISH] Affichage Score + détail combo 
+v0.15.2 = [REWORK] détail suite de combo 
+v0.15.3 = [POLISH] new Background  
+v0.15.4 = [FIX] animation flottant score  
+v0.15.5 = [BRAINSTORM] catch idea dans idea.html  
+v0.16.0 = [POLISH] calcul score : Bonus de vitesse par paire + Bonus d’efficacité 
+v0.16.1 = [POLISH] ticket score : affichage par paires 
+v0.16.2 = [BUGTOFIX] ticket score : affichage complet mais bug stat a résoudre 
+
+** Next step ** 
+- optimiser le responsive
+- Menu principal
+- adapter les icones pour mac
+
+** Gagnat **
+- maximum de combo
+- nombre de tentative faible
+- le numéro de ticket correspont score + combo + lettre fruit

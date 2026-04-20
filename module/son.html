@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Test Audio – 6 Styles Procéduraux</title>
+    <style>
+        body {
+            background: #1f1f1f;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .style-select {
+            margin-bottom: 20px;
+            font-size: 20px;
+        }
+
+        select {
+            font-size: 18px;
+            padding: 6px 10px;
+            border-radius: 5px;
+        }
+
+        .controls {
+            margin-top: 20px;
+        }
+
+        .controls button {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 12px 22px;
+            margin: 8px;
+            font-size: 18px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .controls button:hover {
+            background: #666;
+        }
+
+        #mute {
+            margin-top: 20px;
+            background: #aa3333;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #mute:hover {
+            background: #cc4444;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Test complet des 6 styles sonores procéduraux</h1>
+
+<div class="style-select">
+    <label for="style">Style sonore :</label>
+    <select id="style">
+        <option value="realiste">Réaliste</option>
+        <option value="casino">Casino</option>
+        <option value="cartoon">Cartoon</option>
+        <option value="chiptune">Chiptune</option>
+        <option value="premium">Premium (UX)</option>
+        <option value="dark">Dark / Mystérieux</option>
+    </select>
+</div>
+
+<div class="controls">
+    <button data-sound="flip">Flip</button>
+    <button data-sound="draw">Piocher</button>
+    <button data-sound="place">Poser</button>
+    <button data-sound="shuffle">Shuffle</button>
+    <button data-sound="click">Click UI</button>
+    <button data-sound="win">Win</button>
+    <button data-sound="lose">Lose</button>
+</div>
+
+<button id="mute">Mute / Unmute</button>
+
+<script type="module">
+class AudioManager {
+    constructor() {
+        this.ctx = new (window.AudioContext || window.webkitAudioContext)();
+        this.master = this.ctx.createGain();
+        this.master.connect(this.ctx.destination);
+        this.master.gain.value = 1;
+        this.style = "realiste";
+    }
+
+    unlock() {
+        if (this.ctx.state === "suspended") this.ctx.resume();
+    }
+
+    _pulse(freq, vol, dur, type="sine") {
+        let o = this.ctx.createOscillator();
+        let g = this.ctx.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(freq, this.ctx.currentTime);
+        g.gain.setValueAtTime(vol, this.ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+        o.connect(g);
+        g.connect(this.master);
+        o.start();
+        o.stop(this.ctx.currentTime + dur);
+    }
+
+    _pitch(start, end, vol, dur, type="sine") {
+        let o = this.ctx.createOscillator();
+        let g = this.ctx.createGain();
+        o.type = type;
+        o.frequency.setValueAtTime(start, this.ctx.currentTime);
+        o.frequency.exponentialRampToValueAtTime(end, this.ctx.currentTime + dur);
+        g.gain.setValueAtTime(vol, this.ctx.currentTime);
+        g.gain.exponentialRampToValueAtTime(0.001, this.ctx.currentTime + dur);
+        o.connect(g);
+        g.connect(this.master);
+        o.start();
+        o.stop(this.ctx.currentTime + dur);
+    }
+
+    // Styles procéduraux
+    realiste = {
+        flip: () => this._pitch(200, 260, 0.25, 0.06, "triangle"),
+        draw: () => this._pulse(180, 0.2, 0.04, "sine"),
+        place: () => this._pulse(140, 0.25, 0.05, "sine"),
+        shuffle: () => { for (let i=0;i<6;i++) setTimeout(()=>this.realiste.flip(), i*35)},
+        click: () => this._pulse(300, 0.08, 0.03),
+        win: () => [400, 520, 620].forEach((f,i)=>setTimeout(()=>this._pulse(f,0.25,0.12,"triangle"),i*130)),
+        lose: () => [260,190,120].forEach((f,i)=>setTimeout(()=>this._pulse(f,0.25,0.12,"sine"),i*150)),
+    }
+
+    casino = {
+        flip: () => this._pulse(500, 0.2, 0.05, "square"),
+        draw: () => this._pulse(600, 0.15, 0.04, "square"),
+        place: () => this._pulse(450, 0.18, 0.06, "triangle"),
+        shuffle: () => { for (let i=0;i<7;i++) setTimeout(()=>this.casino.flip(), i*28)},
+        click: () => this._pulse(900, 0.2, 0.02, "sine"),
+        win: () => [800, 1000, 1300].forEach((f,i)=>setTimeout(()=>this._pulse(f,0.3,0.10,"square"),i*90)),
+        lose: () => this._pitch(400,80,0.25,0.25,"triangle")
+    }
+
+    cartoon = {
+        flip: () => this._pitch(300, 500, 0.3, 0.08, "sine"),
+        draw: () => this._pitch(350, 600, 0.25, 0.07, "triangle"),
+        place: () => this._pitch(500, 200, 0.3, 0.1, "sawtooth"),
+        shuffle: () => { for (let i=0;i<5;i++) setTimeout(()=>this.cartoon.draw(), i*60)},
+        click: () => this._pulse(800, 0.25, 0.05, "square"),
+        win: () => [500, 650, 900].forEach((f,i)=>setTimeout(()=>this._pulse(f,0.35,0.12,"sawtooth"),i*120)),
+        lose: () => this._pitch(250, 40, 0.35, 0.3, "sawtooth"),
+    }
+
+    chiptune = {
+        flip: () => this._pulse(700, 0.2, 0.05, "square"),
+        draw: () => this._pulse(850, 0.15, 0.04, "square"),
+        place: () => this._pulse(600, 0.2, 0.05, "square"),
+        shuffle: () => { for (let i=0;i<8;i++) setTimeout(()=>this.chiptune.flip(), i*25)},
+        click: () => this._pulse(1000, 0.1, 0.02, "square"),
+        win: () => [900,1100,1500].forEach((f,i)=>setTimeout(()=>this._pulse(f,0.3,0.12,"square"),i*80)),
+        lose: () => [500, 300, 150].forEach((f,i)=>setTimeout(()=>this._pulse(f,0.25,0.12,"square"),i*140)),
+    }
+
+    premium = {
+        flip: () => this._pulse(240, 0.15, 0.04, "sine"),
+        draw: () => this._pulse(300, 0.1, 0.03, "sine"),
+        place: () => this._pulse(200, 0.18, 0.05, "sine"),
+        shuffle: () => { for (let i=0;i<5;i++) setTimeout(()=>this.premium.flip(), i*40)},
+        click: () => this._pulse(500, 0.1, 0.03, "triangle"),
+        win: () => [300, 450, 600].forEach((f,i)=>setTimeout(()=>this._pulse(f,0.2,0.10,"sine"),i*150)),
+        lose: () => this._pitch(250, 80, 0.2, 0.20, "sine"),
+    }
+
+    dark = {
+        flip: () => this._pulse(90, 0.3, 0.07, "triangle"),
+        draw: () => this._pulse(120, 0.25, 0.06, "sine"),
+        place: () => this._pulse(80, 0.35, 0.08, "triangle"),
+        shuffle: () => { for (let i=0;i<5;i++) setTimeout(()=>this.dark.flip(), i*55)},
+        click: () => this._pulse(200, 0.15, 0.04, "sine"),
+        win: () => [150,200,260].forEach((f,i)=>setTimeout(()=>this._pulse(f,0.35,0.14,"triangle"),i*180)),
+        lose: () => this._pitch(120,30,0.4,0.4,"triangle"),
+    }
+
+    play(type) {
+        this[this.style][type]();
+    }
+
+    toggleMute() {
+        this.master.gain.value = this.master.gain.value === 0 ? 1 : 0;
+    }
+}
+
+// ----------------------------
+// Initialisation
+// ----------------------------
+const audio = new AudioManager();
+document.addEventListener("click", () => audio.unlock(), { once: true });
+
+const styleSelect = document.getElementById("style");
+styleSelect.onchange = () => audio.style = styleSelect.value;
+
+document.querySelectorAll("[data-sound]").forEach(btn => {
+    btn.onclick = () => audio.play(btn.dataset.sound);
+});
+
+document.getElementById("mute").onclick = () => audio.toggleMute();
+</script>
+
+</body>
+</html>

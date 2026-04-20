@@ -1,0 +1,121 @@
+/* ============================================
+   LECTEUR DE MUSIQUE EN BAS À DROITE
+   ============================================ */
+#musicPlayer {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #333;
+    border: 2px solid #555;
+    border-radius: 12px;
+    padding: 15px;
+    width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+    z-index: 2100;
+}
+
+/* Info piste */
+#trackInfo {
+    margin-bottom: 12px;
+}
+
+#trackNameBox {
+    width: 100%;
+    height: 28px;
+    overflow: hidden;
+    position: relative;
+    border-bottom: 1px solid #555;
+    margin-bottom: 6px;
+}
+
+#trackName {
+    font-size: 16px;
+    font-weight: bold;
+    white-space: nowrap;
+    position: absolute;
+    right: -100%;
+    color: #fff;
+}
+
+#trackName.scrolling {
+    animation: scrollText 10s linear infinite;
+}
+
+@keyframes scrollText {
+    0%   { right: -100%; }
+    100% { right: 100%; }
+}
+
+#trackAuthor {
+    font-size: 14px;
+    color: #ccc;
+    text-align: center;
+}
+
+#trackAuthor a {
+    color: #ccc;
+    text-decoration: none;
+}
+
+#trackAuthor a:hover {
+    color: #66bb6a;
+    transition: color 0.2s;
+}
+
+/* Contrôles musique */
+.musicControls {
+    display: flex;
+    justify-content: center;
+    gap: 8px;
+    margin-bottom: 12px;
+}
+
+.musicControls button {
+    background: #444;
+    color: white;
+    border: none;
+    padding: 10px 14px;
+    font-size: 18px;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.musicControls button:hover {
+    background: #666;
+}
+
+/* Volume container */
+.volumeContainer {
+    width: 100%;
+}
+
+#volume {
+    width: 100%;
+    height: 6px;
+    border-radius: 3px;
+    background: #555;
+    outline: none;
+    cursor: pointer;
+    -webkit-appearance: none;
+    appearance: none;
+}
+
+#volume::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #4caf50;
+    cursor: pointer;
+}
+
+#volume::-moz-range-thumb {
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: #4caf50;
+    cursor: pointer;
+    border: none;
+}

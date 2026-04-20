@@ -1,0 +1,122 @@
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #1a1a2e;
+    background-image: 
+        repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.03) 35px, rgba(255,255,255,.03) 70px),
+        repeating-linear-gradient(-45deg, transparent, transparent 35px, rgba(255,255,255,.02) 35px, rgba(255,255,255,.02) 70px);
+    color: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+}
+
+h1 { 
+    margin-bottom: 10px; 
+}
+
+#info {
+    margin-bottom: 20px;
+    text-align: center;
+    font-size: 1.2rem;
+}
+
+#game {
+    display: grid;
+    grid-template-columns: repeat(8, 70px);
+    grid-gap: 12px;
+    perspective: 1000px; /* perspective pour le flip 3D */
+}
+
+/* Carte avec flip 3D */
+.card {
+    width: 70px;
+    height: 70px;
+    position: relative;
+    transform-style: preserve-3d;
+    transition: transform 0.5s ease;
+    cursor: pointer;
+}
+
+/* Flip quand la carte est retournée */
+.card.flipped {
+    transform: rotateY(180deg);
+    cursor: default;
+}
+
+/* Faces de la carte */
+.card-face {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 2rem;
+    backface-visibility: hidden; /* cache la face lorsqu'elle est dos à nous */
+}
+
+/* Dos de la carte */
+.card-back {
+    background: linear-gradient(135deg, #394680 0%, #764ba2 100%);
+    overflow: hidden;
+}
+
+.card-back::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 30px;
+    height: 30px;
+    border: 3px solid rgba(255,255,255,0.3);
+    pointer-events: none;
+}
+
+.card-back::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) rotate(45deg);
+    width: 45px;
+    height: 45px;
+    border: 2px solid rgba(255,255,255,0.2);
+    pointer-events: none;
+}
+
+/* Face avant (symbole) */
+.card-front {
+    background: #fff;
+    color: #000;
+    transform: rotateY(180deg); /* rotation initiale pour que ce soit caché au départ */
+}
+
+/* Animation quand une paire est trouvée */
+.card.matched .card-front {
+    animation: glow 0.8s ease-in-out 0.5s, pulse 0.4s ease-in-out 0.5s;
+}
+
+@keyframes glow {
+    0%   { box-shadow: 0 0 0px #4caf50; }
+    15%  { box-shadow: 0 0 15px #4caf50, 0 0 25px #4caf50; }
+    30%  { box-shadow: 0 0 25px #4caf50, 0 0 40px #4caf50; }
+    50%  { box-shadow: 0 0 30px #4caf50, 0 0 50px #4caf50; }
+    70%  { box-shadow: 0 0 25px #4caf50, 0 0 40px #4caf50; }
+    85%  { box-shadow: 0 0 15px #4caf50, 0 0 25px #4caf50; }
+    92%  { box-shadow: 0 0 8px #4caf50, 0 0 15px #4caf50; }
+    96%  { box-shadow: 0 0 4px #4caf50, 0 0 8px #4caf50; }
+    100% { box-shadow: 0 0 0px #4caf50, 0 0 0px #4caf50; }
+}
+
+/* Petite pulsation de la carte */
+@keyframes pulse {
+    0%   { transform: rotateY(180deg) scale(1); }
+    50%  { transform: rotateY(180deg) scale(1.08); }
+    100% { transform: rotateY(180deg) scale(1); }
+}

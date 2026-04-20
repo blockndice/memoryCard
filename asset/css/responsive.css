@@ -1,0 +1,163 @@
+/* Responsive CSS pour le jeu de cartes jumeaux */
+
+/* Tablettes (portrait et paysage) */
+@media screen and (max-width: 1024px) {
+    body {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 2rem;
+    }
+    
+    #info {
+        font-size: 1.2rem;
+        margin-bottom: 18px;
+    }
+    
+    #game {
+        grid-template-columns: repeat(4, 110px);
+        grid-gap: 15px;
+    }
+    
+    .card {
+        width: 110px;
+        height: 110px;
+        font-size: 2.2rem;
+    }
+}
+
+/* Petites tablettes et grands mobiles (paysage) */
+@media screen and (max-width: 768px) {
+    body {
+        padding: 15px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+        margin-bottom: 10px;
+    }
+    
+    #info {
+        font-size: 1.1rem;
+        margin-bottom: 15px;
+    }
+    
+    #game {
+        grid-template-columns: repeat(4, 95px);
+        grid-gap: 12px;
+    }
+    
+    .card {
+        width: 95px;
+        height: 95px;
+        font-size: 2rem;
+        border-radius: 8px;
+    }
+}
+
+/* Mobiles (portrait) */
+@media screen and (max-width: 480px) {
+    body {
+        padding: 12px;
+    }
+    
+    h1 {
+        font-size: 1.6rem;
+        margin-bottom: 10px;
+    }
+    
+    #info {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    #info div {
+        margin: 4px 0;
+    }
+    
+    #game {
+        grid-template-columns: repeat(4, 80px);
+        grid-gap: 10px;
+    }
+    
+    .card {
+        width: 80px;
+        height: 80px;
+        font-size: 1.8rem;
+        border-radius: 6px;
+    }
+}
+
+/* Très petits mobiles */
+@media screen and (max-width: 360px) {
+    body {
+        padding: 10px;
+    }
+    
+    h1 {
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+    }
+    
+    #info {
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+    }
+    
+    #game {
+        grid-template-columns: repeat(4, 70px);
+        grid-gap: 8px;
+    }
+    
+    .card {
+        width: 70px;
+        height: 70px;
+        font-size: 1.6rem;
+        border-radius: 5px;
+    }
+}
+
+/* Optimisation tactile pour mobile */
+@media (hover: none) and (pointer: coarse) {
+    .card {
+        /* Amélioration de la zone tactile */
+        touch-action: manipulation;
+        -webkit-tap-highlight-color: transparent;
+    }
+    
+    .card:active {
+        transform: scale(0.95);
+    }
+}
+
+/* Mode paysage pour mobiles */
+@media screen and (max-width: 768px) and (orientation: landscape) {
+    body {
+        padding: 10px 20px;
+    }
+    
+    h1 {
+        font-size: 1.4rem;
+        margin-bottom: 8px;
+    }
+    
+    #info {
+        font-size: 0.95rem;
+        margin-bottom: 10px;
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+    }
+    
+    #game {
+        grid-template-columns: repeat(4, 80px);
+        grid-gap: 10px;
+    }
+    
+    .card {
+        width: 80px;
+        height: 80px;
+        font-size: 1.7rem;
+    }
+}

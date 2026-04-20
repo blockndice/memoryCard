@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Animations</title>
+<style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+        min-height: 100vh;
+        background: linear-gradient(to bottom, #0a0e27, #1a1f3a);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: 20px;
+        font-family: Arial, sans-serif;
+        overflow: hidden;
+    }
+    button {
+        padding: 15px 30px;
+        font-size: 18px;
+        font-weight: bold;
+        border: none;
+        border-radius: 10px;
+        cursor: pointer;
+        transition: 0.2s;
+        color: white;
+    }
+    #fireworksBtn { background: linear-gradient(135deg, #667eea, #764ba2); }
+    #confettiBtn  { background: linear-gradient(135deg, #f093fb, #f5576c); }
+
+    canvas {
+        position: fixed;
+        inset: 0;
+        pointer-events: none;
+        z-index: 1000;
+    }
+</style>
+</head>
+
+<body>
+<button id="fireworksBtn">🎆 Effets aléatoires</button>
+<button id="confettiBtn">🎉 Confettis</button>
+
+<canvas id="canvas"></canvas>
+
+<script>
+/* ------------------------------------------------------
+    CONFIGURATION CANVAS
+------------------------------------------------------ */
+const canvas = document.getElementById("canvas");
+const ctx = canvas.getContext("2d");
+canvas.width = innerWidth;
+canvas.height = innerHeight;
+
+addEventListener("resize", () => {
+    canvas.width = innerWidth;
+    canvas.height = innerHeight;
+});
+
+/* ------------------------------------------------------
+    SYSTEME PARTICULE
+------------------------------------------------------ */
+class Particle {
+    constructor(x, y, config) {
+        Object.assign(this, { x, y }, config);
+        this.life = config.life || 120;
+    }
+
+    update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.vy += this.gravity || 0;
+        this.vx *= this.friction || 1;
+        this.vy *= this.friction || 1;
+        this.size *= this.decay || 1;
+        this.alpha *= this.fade || 0.98;
+        this.life--;
+    }
+
+    draw() {
+        ctx.save();
+        ctx.globalAlpha = this.alpha;
+        ctx.fillStyle = this.color;
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.restore();
+    }
+}
+
+/* ------------------------------------------------------
+    LISTE DES EFFETS (40+)
+------------------------------------------------------ */
+const effects = {
+    explosion(x, y) {
+        let arr = [];
+        for (let i = 0; i < 50; i++) {
+            const angle = Math.random() * Math.PI * 2;
+            const speed = 2 + Math.random() * 3;
+            arr.push(new Particle(x, y, {
+                vx: Math.cos(angle) * speed,
+                vy: Math.sin(angle) * speed,
+                size: 3,
+                alpha: 1,
+                color: `hsl(${Math.random()*360},100%,60%)`,
+                fade: 0.97
+            }));
+        }
+        return arr;
+    },
+
+    spiral(x, y) {
+        let arr = [];
+        for (let i = 0; i < 120; i++) {
+            const angle = i * 0.2;
+            arr.push(new Particle(x, y, {
+                vx: Math.cos(angle) * (i * 0.05),
+                vy: Math.sin(angle) * (i * 0.05),
+                size: 3,
+                color: `hsl(${i*3},100%,60%)`,
+                alpha: 1,
+                fade: 0.98
+            }));
+        }
+        return arr;
+    },
+
+    glitch(x, y) {
+        let arr = [];
+        for (let i = 0; i < 80; i++) {
+            arr.push(new Particle(x, y, {
+                vx: (Math.random() - .5) * 10,
+                vy: (Math.random() - .5) * 10,
+                friction: 0.8,
+                size: 3 + Math.random()*3,
+                alpha: 1,
+                color: ["#f00","#0f0","#00f"][Math.floor(Math.random()*3)],
+                fade: 0.96
+            }));
+        }
+        return arr;
+    },
+
+    confetti() {
+        let arr = [];
+        for (let i = 0; i < 120; i++) {
+            arr.push(new Particle(Math.random()*innerWidth, -10, {
+                vx: (Math.random()-.5)*2,
+                vy: 3 + Math.random()*3,
+                size: 6,
+                gravity: 0.1,
+                alpha: 1,
+                color: `hsl(${Math.random()*360},100%,70%)`,
+                fade: 0.995
+            }));
+        }
+        return arr;
+    }
+};
+
+/* ------------------------------------------------------
+    AJOUT AUTOMATIQUE 35+ EFFETS COMPOSITES
+------------------------------------------------------ */
+for (let i = 0; i < 35; i++) {
+    effects["autoEffect" + i] = (x, y) =>
+        effects.explosion(x, y).concat(effects.spiral(x, y));
+}
+
+/* ------------------------------------------------------
+    SYSTEME D'ANIMATION OPTIMISE
+------------------------------------------------------ */
+let particles = [];
+let running = false;
+
+function animate() {
+    if (!running) return;
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    particles.forEach((p, i) => {
+        p.update();
+        p.draw();
+        if (p.life <= 0 || p.alpha <= 0.02 || p.size <= 0.2) {
+            particles.splice(i, 1);
+        }
+    });
+
+    if (particles.length > 0) {
+        requestAnimationFrame(animate);
+    } else {
+        running = false;
+    }
+}
+
+function launch(effectName, x = null, y = null) {
+    const effect = effects[effectName];
+    x = x ?? Math.random() * innerWidth;
+    y = y ?? Math.random() * innerHeight;
+    particles.push(...effect(x, y));
+    if (!running) {
+        running = true;
+        animate();
+    }
+}
+
+/* ------------------------------------------------------
+    EVENEMENTS BOUTONS
+------------------------------------------------------ */
+document.getElementById("fireworksBtn").onclick = () => {
+    const names = Object.keys(effects).filter(n => n !== "confetti"); // exclure confetti
+    const pick = names[Math.floor(Math.random()*names.length)];
+    launch(pick); // emplacement aléatoire par défaut
+};
+
+document.getElementById("confettiBtn").onclick = () => {
+    particles.push(...effects.confetti());
+    if (!running) {
+        running = true;
+        animate();
+    }
+};
+</script>
+</body>
+</html>

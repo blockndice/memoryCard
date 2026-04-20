@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<title>Idées pour diversifier les scores</title>
+<style>
+    body {
+        font-family: "Segoe UI", Arial, sans-serif;
+        background: #1e1e1e;
+        color: #f2f2f2;
+        margin: 0;
+        padding: 0;
+        line-height: 1.6;
+    }
+
+    header {
+        background: linear-gradient(135deg, #4caf50, #2e7d32);
+        padding: 40px 20px;
+        text-align: center;
+        color: white;
+        font-size: 2rem;
+        font-weight: bold;
+        letter-spacing: 1px;
+        box-shadow: 0 4px 10px rgba(0,0,0,.3);
+    }
+
+    main {
+        max-width: 900px;
+        margin: 40px auto;
+        padding: 20px;
+        background: #2a2a2a;
+        border-radius: 12px;
+        box-shadow: 0 4px 25px rgba(0,0,0,.4);
+        border: 1px solid #444;
+    }
+
+    h2 {
+        color: #4caf50;
+        margin-top: 40px;
+        margin-bottom: 10px;
+        font-size: 1.8rem;
+    }
+
+    h3 {
+        color: #ff9800;
+        margin-bottom: 5px;
+    }
+
+    p, li, code {
+        font-size: 1.05rem;
+    }
+
+    section {
+        margin-bottom: 35px;
+        padding-bottom: 20px;
+        border-bottom: 1px solid #444;
+    }
+
+    code {
+        display: block;
+        background: #111;
+        border-left: 4px solid #4caf50;
+        padding: 10px;
+        margin: 10px 0;
+        border-radius: 5px;
+        font-family: "Consolas", monospace;
+        color: #a6e3a1;
+        white-space: pre-wrap;
+    }
+
+    table {
+        width: 100%;
+        margin-top: 10px;
+        border-collapse: collapse;
+        background: #1a1a1a;
+    }
+
+    table th, table td {
+        padding: 10px;
+        border: 1px solid #444;
+        text-align: center;
+    }
+
+    table th {
+        background: #333;
+        color: #ffeb3b;
+    }
+
+    .tag {
+        display: inline-block;
+        padding: 4px 10px;
+        background: #4caf50;
+        color: #fff;
+        border-radius: 6px;
+        font-size: 0.9rem;
+        margin-left: 6px;
+    }
+
+    footer {
+        margin-top: 40px;
+        text-align: center;
+        padding: 20px;
+        color: #aaa;
+        font-size: 0.9rem;
+    }
+</style>
+</head>
+<body>
+
+<header>🎯 Idées pour éviter la similitude des scores</header>
+
+<main>
+
+<!-- 10 -->
+<section>
+    <h2>🔟 10 — Multiplicateur final multi-facteurs</h2>
+    <p>Le score final dépend de facteurs combinés :</p>
+    <ul>
+        <li>Max combo</li>
+        <li>Efficacité (paires trouvées / tentatives)</li>
+        <li>Temps total</li>
+        <li>Bonus optionnels</li>
+    </ul>
+    <h3>Formule :</h3>
+<code>
+scoreFinal =
+    scoreBrut
+    * (1 + maxCombo * 0.05)
+    * (0.5 + efficience)
+    * (1 + bonusTemps)
+</code>
+</section>
+
+
+<!-- 9 -->
+<section>
+    <h2>9️⃣ 9 — Bonus selon un grade (S, A, B, C)</h2>
+
+    <p>Le joueur reçoit un grade final basé sur :</p>
+    <ul>
+        <li>Temps</li>
+        <li>Tentatives</li>
+        <li>Max combo</li>
+        <li>Régularité</li>
+    </ul>
+
+    <table>
+        <tr><th>Grade</th><th>Bonus</th></tr>
+        <tr><td>S</td><td>+200</td></tr>
+        <tr><td>A</td><td>+120</td></tr>
+        <tr><td>B</td><td>+60</td></tr>
+        <tr><td>C</td><td>+20</td></tr>
+        <tr><td>D</td><td>0</td></tr>
+    </table>
+
+</section>
+
+
+
+<!-- 8 -->
+<section>
+    <h2>8️⃣ 8 — Combo avancé (non linéaire)</h2>
+    <p>Chaque combo vaut plus que le précédent grâce à une exponentielle :</p>
+<code>
+points = basePoints * pow(combo, 1.25)
+</code>
+</section>
+
+
+
+<!-- 6 -->
+<section>
+    <h2>6️⃣ 6 — Valeur par rareté du symbole</h2>
+    <p>Chaque type de fruit peut avoir une valeur différente :</p>
+<code>
+🍇 = 8 pts  
+🍎 = 10 pts  
+🍍 = 15 pts  
+🥭 = 18 pts  
+🍒 = 20 pts
+</code>
+</section>
+
+
+
+<!-- 5 -->
+<section>
+    <h2>5️⃣ 5 — Bonus selon le temps total</h2>
+    <p>Plus la partie est rapide, plus le bonus est élevé.</p>
+
+<code>
+bonusTemps = max(0, 200 - tempsEnSecondes)
+</code>
+</section>
+
+
+
+<!-- 4 -->
+<section>
+    <h2>4️⃣ 4 — Bonus d’efficacité</h2>
+
+    <p>Récompense la précision du joueur :</p>
+
+<code>
+efficience = pairesTrouvées / tentatives
+scoreFinal = score * (0.5 + efficience)
+</code>
+</section>
+
+
+
+<!-- 3 -->
+<section>
+    <h2>3️⃣ 3 — Bonus de streak (séries sans faute)</h2>
+    <p>Compte les paires trouvées sans aucune erreur :</p>
+
+<code>
+5 paires sans faute → +20 pts  
+8 paires → +40 pts  
+12 paires → +80 pts
+</code>
+</section>
+
+
+
+<!-- 2 -->
+<section>
+    <h2>2️⃣ 2 — Malus des erreurs</h2>
+    <p>Réduit le score selon les tentatives ratées.</p>
+
+<code>
+score -= erreurs * 1
+</code>
+
+<code>
+scoreFinal = score * (1 - erreurs * 0.03)
+</code>
+</section>
+
+
+
+<!-- 1 -->
+<section>
+    <h2>1️⃣ 1 — Bonus de vitesse par paire</h2>
+    <p>Mesure la rapidité entre deux paires trouvées :</p>
+
+    <table>
+        <tr><th>Temps par paire</th><th>Multiplicateur</th></tr>
+        <tr><td>&lt; 1 sec</td><td>×3</td></tr>
+        <tr><td>1–2 sec</td><td>×2</td></tr>
+        <tr><td>2–4 sec</td><td>×1.5</td></tr>
+        <tr><td>&gt; 4 sec</td><td>×1</td></tr>
+    </table>
+
+<code>
+points = basePoints * combo * multiplicateurVitesse
+</code>
+</section>
+
+
+
+<!-- Recommendation -->
+<section>
+    <h2>⭐ Combinaison idéale</h2>
+    <p>Pour avoir des scores vraiment uniques à chaque partie :</p>
+
+    <ul>
+        <li>🔟 Multiplicateur multi-facteurs</li>
+        <li>6️⃣ Valeur selon la rareté des symboles</li>
+        <li>4️⃣ Bonus d’efficacité</li>
+        <li>1️⃣ Bonus de vitesse par paire</li>
+    </ul>
+</section>
+
+
+</main>
+
+<footer>
+    Fichier HTML généré automatiquement — ChatGPT  
+</footer>
+
+</body>
+</html>

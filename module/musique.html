@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Musique – Game BGM</title>
+    <style>
+        body {
+            background: #1f1f1f;
+            font-family: Arial, sans-serif;
+            color: white;
+            text-align: center;
+            padding: 30px;
+        }
+
+        h1 { margin-bottom: 20px; }
+
+        /* --- BOUTONS --- */
+        .controls button {
+            background: #444;
+            color: white;
+            border: none;
+            padding: 12px 18px;
+            margin: 8px;
+            font-size: 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+        .controls button:hover { background: #666; }
+
+        #mute {
+            margin-top: 20px;
+            background: #aa3333;
+            padding: 12px 20px;
+            font-size: 18px;
+            border-radius: 6px;
+            border: none;
+            cursor: pointer;
+        }
+
+        #volume {
+            width: 250px;
+            margin-top: 20px;
+        }
+
+        /* --- MARQUEE (défilement du titre) --- */
+        #trackNameBox {
+            width: 300px;
+            height: 30px;
+            margin: 20px auto 0 auto;
+            overflow: hidden;
+            position: relative;
+            border-bottom: 1px solid #555;
+        }
+
+        #trackName {
+            font-size: 22px;
+            font-weight: bold;
+            white-space: nowrap;
+            position: absolute;
+            right: -100%; /* commence à droite hors écran */
+            animation: scrollText 10s linear infinite;
+        }
+
+        @keyframes scrollText {
+            0%   { right: -100%; }
+            100% { right: 100%; }
+        }
+
+        #trackAuthor {
+            font-size: 18px;
+            color: #ccc;
+            margin-top: 8px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>Playlist</h1>
+
+<!-- Conteneur animé -->
+<div id="trackNameBox">
+    <div id="trackName">Chargement…</div>
+</div>
+<div id="trackAuthor"></div>
+
+<div class="controls">
+    <button id="prev">⏮️</button>
+    <button id="play">▶️</button>
+    <button id="next">⏭️</button>
+</div>
+
+<input type="range" id="volume" min="0" max="1" step="0.01" value="1">
+<br>
+<button id="mute">🔊</button>
+
+
+<script>
+// ---------------------------------------------------------
+// PLAYLIST MUSIQUES DE JEUX 🎮
+const playlist = [
+    { name: "1 - Piano Background Music Soft", auteur: "Viacheslav Starostin", url: "asset/music/PianoBackground.mp3" },
+    { name: "2 - Lofi Chill", auteur: "DELOSound", url: "asset/music/LofiChill.mp3" },
+    { name: "3 - Lofi Background", auteur: "DELOSound", url: "asset/music/LofiBackground.mp3" },
+    { name: "4 - Nature Documentary", auteur: "DELOSound", url: "asset/music/NatureDocumentary.mp3" }
+];
+
+let index = 0;
+
+// ---------------------------------------------------------
+const audio = new Audio();
+audio.volume = 1;
+
+// ---------------------------------------------------------
+function restartScrolling() {
+    const el = document.getElementById("trackName");
+
+    // reset animation proprement
+    el.style.animation = "none";
+    void el.offsetHeight; // force re-render
+    el.style.animation = null;
+}
+
+function loadTrack(autoPlay = false) {
+    const track = playlist[index];
+
+    document.getElementById("trackName").textContent = track.name;
+    document.getElementById("trackAuthor").textContent = track.auteur;
+
+    audio.src = track.url;
+
+    restartScrolling(); // relancer le défilement à chaque changement
+
+    if (autoPlay) {
+        audio.play().catch(err => console.log("Autoplay bloqué:", err));
+        updatePlayButton(true);
+    } else {
+        updatePlayButton(false);
+    }
+}
+
+// ---------------------------------------------------------
+function togglePlay() {
+    if (audio.paused) {
+        audio.play();
+        updatePlayButton(true);
+    } else {
+        audio.pause();
+        updatePlayButton(false);
+    }
+}
+
+function updatePlayButton(state) {
+    document.getElementById("play").textContent = state ? "⏸️" : "▶️";
+}
+
+// ---------------------------------------------------------
+document.getElementById("play").onclick = togglePlay;
+
+document.getElementById("next").onclick = () => {
+    index = (index + 1) % playlist.length;
+    loadTrack(true);
+};
+
+document.getElementById("prev").onclick = () => {
+    index = (index - 1 + playlist.length) % playlist.length;
+    loadTrack(true);
+};
+
+document.getElementById("mute").onclick = () => {
+    audio.muted = !audio.muted;
+    document.getElementById("mute").textContent = audio.muted ? "🔇" : "🔊";
+};
+
+document.getElementById("volume").oninput = e => {
+    audio.volume = e.target.value;
+};
+
+// Charger première piste
+loadTrack(false);
+</script>
+
+</body>
+</html>

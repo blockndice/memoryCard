@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Jeu de Cartes Jumeaux</title>
+    <link rel="stylesheet" href="asset/css/grid.css">
+    <link rel="stylesheet" href="asset/css/son.css">
+    <link rel="stylesheet" href="asset/css/combo.css">
+    <link rel="stylesheet" href="asset/css/responsive.css">
+
+    <!-- Icône SVG locale -->
+    <link rel="icon" href="data:image/svg+xml, <svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'> <text y='0.9em' font-size='90'>🃏</text> </svg>">
+</head>
+<body>
+
+<h1>Jeu de Cartes Jumeaux</h1>
+
+<div id="info">
+    <div id="clickStatus">Cliquez sur la première carte</div>
+    <div id="attempts">Tentatives : 0</div>
+    <div id="remaining">Paires restantes : 32</div>
+    <div id="score">Score : 0</div>
+</div>
+
+<div id="game"></div>
+
+<!-- Lecteur de musique intégré -->
+<div id="musicPlayer">
+    <div id="trackInfo">
+        <div id="trackNameBox">
+            <div id="trackName">Chargement…</div>
+        </div>
+        <div id="trackAuthor"></div>
+    </div>
+    
+    <div class="musicControls">
+        <button id="prev">⏮️</button>
+        <button id="play">▶️</button>
+        <button id="next">⏭️</button>
+        <button id="muteButton">🔊</button>
+    </div>
+    
+    <div class="volumeContainer">
+        <input type="range" id="volume" min="0" max="100" value="50">        
+        <span class="volumeIcon">🔉</span>
+        <span class="volumePercent" id="volumePercent">50%</span>
+    </div>
+</div>
+
+<!-- Charger les scripts dans le bon ordre -->
+<script src="asset/js/son.js"></script>
+<script src="asset/js/combo.js"></script>
+<script src="asset/js/animation.js"></script>
+<script src="asset/js/ticket.js"></script>
+<script src="asset/js/grid.js"></script>
+<script src="asset/js/try.js"></script>
+
+</body>
+</html>
