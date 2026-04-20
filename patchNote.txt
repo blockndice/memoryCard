@@ -31,6 +31,7 @@ v0.15.5 = [BRAINSTORM] catch idea dans idea.html
 v0.16.0 = [POLISH] calcul score : Bonus de vitesse par paire + Bonus d’efficacité 
 v0.16.1 = [POLISH] ticket score : affichage par paires 
 v0.16.2 = [BUGTOFIX] ticket score : affichage complet mais bug stat a résoudre 
+v0.16.3 = [HOTFIX] Correction lien du projet dans readME
 
 ** Next step ** 
 - optimiser le responsive
